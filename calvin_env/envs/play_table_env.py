@@ -16,7 +16,7 @@ import hydra
 import numpy as np
 import pybullet as p
 import pybullet_utils.bullet_client as bc
-
+import importlib
 import calvin_env
 from calvin_env.utils.utils import FpsController, get_git_commit_hash
 
@@ -99,7 +99,9 @@ class PlayTableSimEnv(gym.Env):
                 p.configureDebugVisualizer(p.COV_ENABLE_SEGMENTATION_MARK_PREVIEW, 0, physicsClientId=cid)
                 p.configureDebugVisualizer(p.COV_ENABLE_DEPTH_BUFFER_PREVIEW, 0, physicsClientId=cid)
                 p.configureDebugVisualizer(p.COV_ENABLE_RGB_BUFFER_PREVIEW, 0, physicsClientId=cid)
-                egl = pkgutil.get_loader("eglRenderer")
+                # egl = pkgutil.get_loader("eglRenderer")
+                spec = importlib.util.find_spec("eglRenderer")
+                egl = spec.loader
                 log.info("Loading EGL plugin (may segfault on misconfigured systems)...")
                 if egl:
                     plugin = p.loadPlugin(egl.get_filename(), "_eglRendererPlugin")
